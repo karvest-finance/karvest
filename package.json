@@ -22,5 +22,8 @@
     "prettier-plugin-solidity": "^1.1.3",
     "solhint": "^3.6.2",
     "solhint-plugin-prettier": "^0.1.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0"
   }
 }
