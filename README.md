@@ -38,13 +38,15 @@ yarn
 yarn hardhat run  scripts/deployClaimAndSwap.ts --network gnosis
 ```
 
-This contract is deployed and verified at [0x6c14F0ef1d77fD9a2F43d6CF17ac6F255803aeD0](https://gnosisscan.io/address/0x6c14F0ef1d77fD9a2F43d6CF17ac6F255803aeD0#code). It points to the [ComposableCow](https://gnosisscan.io/address/0xfdafc9d1902f4e0b84f65f49f244b32b31013b74) Contract, but uses a [MockSBCDepositContract](https://gnosisscan.io/address/0xf07afcee9dd0b859edd41603a3d725b70086fef6) (for the purpose of demo) which emits WXDAI instead of GNO.
+This contract is deployed and verified at [0x6c14F0ef1d77fD9a2F43d6CF17ac6F255803aeD0](https://gnosisscan.io/address/0x6c14F0ef1d77fD9a2F43d6CF17ac6F255803aeD0#code). 
+
+It points to the [ComposableCow](https://gnosisscan.io/address/0xfdafc9d1902f4e0b84f65f49f244b32b31013b74) Contract, but uses a [MockSBCDepositContract](https://gnosisscan.io/address/0xf07afcee9dd0b859edd41603a3d725b70086fef6) (for the purpose of the hackathon) which emits WXDAI instead of GNO.
 
 ### SDK
 
 [Sample Transaction](https://gnosisscan.io/tx/0xadacb7d0862c0f4f341edcfb4ab9746995ef609bb543cbfbccba62b7ef29824a)
-    1. Claims Validator Rewards
-    2. Swaps (not all but some) for COW token.
+1. Claims Validator Rewards
+1. Swaps (not all but some) for COW token.
 
 Env file requires `PRIVATE_KEY`
 
