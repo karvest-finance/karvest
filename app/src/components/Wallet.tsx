@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import SdkInstance, { SafeInfo } from '@safe-global/safe-apps-sdk';
 import BalancesTable from './BalancesTable';
 import { TokenBalance } from '@safe-global/safe-apps-sdk';
-import ClaimTable from './ClaimTable';
 import { ClaimableProtocol } from '../types';
 type OwnProps = {
 	sdk: SdkInstance;
@@ -40,7 +39,7 @@ const protocolsList: ClaimableProtocol[] = [
 		logo: "https://example.com/aave-logo.png"
 	}
 ];
-const Main = ({ sdk, safeInfo, offChainSigningEnabled }: OwnProps): React.ReactElement => {
+const Wallet = ({ sdk, safeInfo, offChainSigningEnabled }: OwnProps): React.ReactElement => {
 	const [balances, setBalances] = useState<TokenBalance[]>([]);
 
 	useEffect(() => {
@@ -62,11 +61,9 @@ const Main = ({ sdk, safeInfo, offChainSigningEnabled }: OwnProps): React.ReactE
 		<section>
 			<h2>Wallet</h2>
 			<BalancesTable balances={balances} />
-			<br />
-			<h2>Harvest</h2>
-			<ClaimTable protocols={protocolsList} />
+
 		</section>
 	);
 };
 
-export default Main;
+export default Wallet
