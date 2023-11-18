@@ -1,7 +1,7 @@
 {
-  "short_name": "Safe App",
-  "name": "Safe App",
-  "description": "Describe your Safe App here",
+  "short_name": "Karvest",
+  "name": "Karvest",
+  "description": "Time to cowllect",
   "icons": [
     {
       "src": "logo.svg",

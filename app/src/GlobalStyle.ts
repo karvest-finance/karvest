@@ -10,7 +10,8 @@ const GlobalStyle = createGlobalStyle`
        height: 100%;
        margin: 0px;
        padding: 0px;
-       background-color: #666;
+    //    background-color: #666;
+
     }
 
     #root {

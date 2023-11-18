@@ -2,13 +2,44 @@ import React, {useState, useEffect} from 'react';
 import SdkInstance, { SafeInfo } from '@safe-global/safe-apps-sdk';
 import BalancesTable from './BalancesTable';
 import { TokenBalance } from '@safe-global/safe-apps-sdk';
-
+import ClaimTable from './ClaimTable';
+import { ClaimableProtocol } from '../types';
 type OwnProps = {
 	sdk: SdkInstance;
 	safeInfo: SafeInfo;
 	offChainSigningEnabled: boolean;
-};
+}; 
 
+const protocolsList: ClaimableProtocol[] = [
+	{
+		name: "Balancer",
+		amount: 214,
+		symbol: "BAL",
+		harvest: -1,
+		logo: "https://example.com/balancer-logo.png"
+	},
+	{
+		name: "Gearbox",
+		amount: 50,
+		symbol: "GBX",
+		harvest: -1,
+		logo: "https://example.com/gearbox-logo.png"
+	},
+	{
+		name: "Gnosis Validation",
+		amount: 200,
+		symbol: "GNO",
+		harvest: 200,
+		logo: "https://example.com/gnosis-validation-logo.png"
+	},
+	{
+		name: "AAVE",
+		amount: 0,
+		symbol: "AAVE",
+		harvest: -1,
+		logo: "https://example.com/aave-logo.png"
+	}
+];
 const Main = ({ sdk, safeInfo, offChainSigningEnabled }: OwnProps): React.ReactElement => {
 	const [balances, setBalances] = useState<TokenBalance[]>([]);
 
@@ -27,7 +58,15 @@ const Main = ({ sdk, safeInfo, offChainSigningEnabled }: OwnProps): React.ReactE
 		getBalances();
 	}, []);
 
-	return <BalancesTable balances={balances} />;
+	return (
+		<section>
+			<h2>Wallet</h2>
+			<BalancesTable balances={balances} />
+			<br />
+			<h2>Harvest</h2>
+			<ClaimTable protocols={protocolsList} />
+		</section>
+	);
 };
 
 export default Main;
