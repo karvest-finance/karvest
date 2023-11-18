@@ -172,7 +172,7 @@ export async function postAppData(appData: AppData): Promise<void> {
       },
     });
 
-    console.log("App data updated successfully");
+    console.log("App data posted successfully");
   } catch (error: any) {
     console.error("Error updating app data:", error.message);
   }
@@ -226,8 +226,7 @@ export async function mixedEoaSafeAppData(
 export async function safeOnlyAppData(
   safeAddress: string,
   claimContractAddress: string
-  // claimTokenAddress: string
-) {
+): Promise<AppData> {
   const provider = new ethers.providers.JsonRpcProvider(
     process.env.NODE_URL || "https://rpc.gnosischain.com/"
   );
@@ -237,4 +236,5 @@ export async function safeOnlyAppData(
     []
   );
   await postAppData(appData);
+  return appData;
 }
