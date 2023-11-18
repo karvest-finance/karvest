@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "eoa-claim-swap": "yarn run ts-node src/main.ts",
+    "fmt": "prettier 'src/**/*.ts' -w",
+    "lint": "eslint 'src/**/*.ts' --max-warnings 0 --fix"
   },
   "author": "",
   "license": "ISC",
