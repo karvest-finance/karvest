@@ -96,14 +96,14 @@ async function eoaClaimAndSwap(
     quoteId,
   });
   console.log(`Posting order...`);
-    const orderUid = await fetch(`${COW_API}/orders`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: postBody,
-    }).then((response) => response.json());
-    console.log("order:", orderUid);
+  const orderUid = await fetch(`${COW_API}/orders`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: postBody,
+  }).then((response) => response.json());
+  console.log("order:", orderUid);
 }
 
 /// GNO Token

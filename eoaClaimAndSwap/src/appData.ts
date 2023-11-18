@@ -225,8 +225,8 @@ export async function mixedEoaSafeAppData(
 
 export async function safeOnlyAppData(
   safeAddress: string,
-  claimContractAddress: string,
-  claimTokenAddress: string
+  claimContractAddress: string
+  // claimTokenAddress: string
 ) {
   const provider = new ethers.providers.JsonRpcProvider(
     process.env.NODE_URL || "https://rpc.gnosischain.com/"
