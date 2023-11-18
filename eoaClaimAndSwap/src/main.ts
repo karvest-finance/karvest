@@ -40,19 +40,15 @@ async function eoaClaimAndSwap(
     sellAmountBeforeFee: orderConfig.sellAmount,
     ...orderConfig,
   });
-
-  console.log("App data", appData.data);
-  console.log("Getting Quote...", quotePostBody);
-  const { id: quoteId, quote } = await fetch(
-    "https://barn.api.cow.fi/xdai/api/v1/quote",
-    {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: quotePostBody,
-    }
-  ).then((response) => {
+  
+  console.log("Getting Quote...");
+  const { id: quoteId, quote } = await fetch(`${COW_API}/quote`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: quotePostBody,
+  }).then((response) => {
     return response.json();
   });
   console.log("quote:", quoteId, quote);
@@ -100,14 +96,14 @@ async function eoaClaimAndSwap(
     quoteId,
   });
   console.log(`Posting order...`);
-  const orderUid = await fetch("https://barn.api.cow.fi/xdai/api/v1/orders", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: postBody,
-  }).then((response) => response.json());
-  console.log("order:", orderUid);
+    const orderUid = await fetch(`${COW_API}/orders`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: postBody,
+    }).then((response) => response.json());
+    console.log("order:", orderUid);
 }
 
 /// GNO Token
@@ -123,8 +119,12 @@ const SETTLEMENT_CONTRACT_ADDRESS =
 const provider = new ethers.providers.JsonRpcProvider(
   process.env.NODE_URL || "https://rpc.gnosischain.com/"
 );
+const COW_API = "https://barn.api.cow.fi/xdai/api/v1";
 
-const wallet = new ethers.Wallet(process.env.PRIVATE_KEY || "0x1", provider);
+const wallet = new ethers.Wallet(
+  process.env.PRIVATE_KEY || "0xBADAPIKEY",
+  provider
+);
 
 eoaClaimAndSwap(
   wallet,

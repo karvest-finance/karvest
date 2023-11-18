@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "eoa-claim-swap": "yarn run ts-node src/main.ts",
+    "run-eoa": "yarn run ts-node src/main.ts",
     "fmt": "prettier 'src/**/*.ts' -w",
     "lint": "eslint 'src/**/*.ts' --max-warnings 0 --fix"
   },
