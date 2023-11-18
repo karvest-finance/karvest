@@ -1,6 +1,7 @@
 
 
 import { ethers } from "ethers";
+import axios from 'axios';
 
 function PermittableToken(provider: ethers.providers.JsonRpcProvider, address: string): ethers.Contract {
   return new ethers.Contract(
@@ -112,8 +113,14 @@ function buildClaimHook(provider: ethers.providers.JsonRpcProvider, withdrawalAd
   return claimHook;
 }
 
-function generateAppData(preHooks: object[], postHooks: object[]) {
+export type AppData = {
+  hash: string,
+  data: string,
+}
+
+function generateAppData(preHooks: object[], postHooks: object[]): AppData {
   const appData = JSON.stringify({
+    appCode: "CoW Swap",
     version: "0.9.0",
     metadata: {
       hooks: {
@@ -122,18 +129,58 @@ function generateAppData(preHooks: object[], postHooks: object[]) {
       },
     },
   });
+
   console.log(`App Data ${appData}`);
   const appHash = ethers.utils.id(appData);
   console.log(`App Hash ${appHash}`);
+  // https://api.cow.fi/docs/#/
+  // This needs to be posted to https://api.cow.fi/xdai/api/v1/app_data/{app_hash}
+  // with payload {"fullAppData": "{appData}"}
+  // CURL: Note that this has to be an escaped JSON string.
+  // curl -X 'PUT' \
+  // 'https://api.cow.fi/xdai/api/v1/app_data/{APP_HASH}' \
+  // -H 'accept: application/json' \
+  // -H 'Content-Type: application/json' \
+  // -d '{
+  // "fullAppData":"{\"appCode\":\"CoW Swap\",\"metadata\":{\"hooks\":{\"post\":[],\"pre\":[{\"callData\":\"0xa3066aab000000000000000000000000{WITHDRAWAL_ADDRESS}\",\"gasLimit\":\"82264\",\"target\":\"0x0B98057eA310F4d31F2a452B414647007d1645d9\"}],\"version\":\"0.1.0\"}},\"version\":\"0.10.0\"}"}'
+  return {hash: appHash, data: appData}
 }
 
 
-const provider = new ethers.providers.JsonRpcProvider(process.env.NODE_URL || "https://rpc.gnosischain.com/");
+
+
+
+async function postAppData(withdrawalAddress: string): Promise<void> {
+  const provider = new ethers.providers.JsonRpcProvider(process.env.NODE_URL || "https://rpc.gnosischain.com/");
+
+
+  // TODO - EOA permit SAFE via set allowance and encode transfer from hook.
+  let {hash, data } = generateAppData([buildClaimHook(provider, withdrawalAddress)], [])
+
+  const url = `https://api.cow.fi/xdai/api/v1/app_data/${hash}`;
+  const requestBody = {
+    fullAppData: data,
+  };
+
+  try {
+    await axios.put(url, requestBody, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    console.log('App data updated successfully');
+  } catch (error: any) {
+    console.error('Error updating app data:', error.message);
+  }
+}
+
 const withdrawalAddress = process.env.WITHDRAWAL_ADDRESS;
-if (!withdrawalAddress) throw new Error("missing withdrawal address");
+if (!withdrawalAddress) throw new Error("env var WITHDRAWAL_ADDRESS");
 
-// TODO - EOA permit SAFE via set allowance and encode transfer from hook.
-generateAppData([buildClaimHook(provider, withdrawalAddress)], [])
-
-
-
+postAppData(withdrawalAddress).then(() => {
+  console.log('App data update initiated');
+}).catch((error) => {
+  console.error('Error initiating app data update:', error.message);
+});
