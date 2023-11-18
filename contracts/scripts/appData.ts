@@ -189,24 +189,23 @@ async function postAppData(appData: AppData): Promise<void> {
     }
 }
 
-async function multisigAppData() {
-    const WITHDRAWAL_ADDRESS = process.env.WITHDRAWAL_ADDRESS;
-    if (!WITHDRAWAL_ADDRESS) throw new Error("env var WITHDRAWAL_ADDRESS");
-    const SAFE_ADDRESS = process.env.SAFE_ADDRESS;
-    if (!SAFE_ADDRESS) throw new Error("env var SAFE_ADDRESS");
-
-    /// GNO Token
-    // const CLAIM_TOKEN_ADDRESS = "0x9c58bacc331c9aa871afd802db6379a98e80cedb";
-    /// SBD Deposit Contract
-    const CLAIM_CONTRACT_ADDRESS = "0x0B98057eA310F4d31F2a452B414647007d1645d9";
+async function multisigAppData(safeAddress: string, claimContractAddress: string) {
     const provider = new ethers.providers.JsonRpcProvider(process.env.NODE_URL || "https://rpc.gnosischain.com/");
-
     // TODO - EOA permit SAFE via set allowance and encode transfer from hook.
-    let appData = generateAppData([buildClaimHook(provider, WITHDRAWAL_ADDRESS, CLAIM_CONTRACT_ADDRESS)], []);
+    let appData = generateAppData([buildClaimHook(provider, safeAddress, claimContractAddress)], []);
     await postAppData(appData);
 }
 
-multisigAppData()
+
+const WITHDRAWAL_ADDRESS = process.env.WITHDRAWAL_ADDRESS;
+if (!WITHDRAWAL_ADDRESS) throw new Error("env var WITHDRAWAL_ADDRESS");
+/// GNO Token
+// const CLAIM_TOKEN_ADDRESS = "0x9c58bacc331c9aa871afd802db6379a98e80cedb";
+/// SBD Deposit Contract
+const CLAIM_CONTRACT_ADDRESS = "0x0B98057eA310F4d31F2a452B414647007d1645d9";
+
+
+multisigAppData(WITHDRAWAL_ADDRESS, CLAIM_CONTRACT_ADDRESS)
     .then(() => {
         console.log("App data update initiated");
     })
