@@ -9,12 +9,13 @@ async function main() {
     const amount = ethers.parseEther("0.001");
     const deposit = await ethers.deployContract("SBCDepositContractMock", [wxDai, amount]);
     await deposit.waitForDeployment();
+    console.log(`SBCDepositContractMock deployed to ${deposit.target}`);
 
     const claimable = await deposit.withdrawableAmount(deployer.address);
     console.log(`Withdrawable amount: ${claimable}`);
 
-    const factory = await ethers.getContractFactory("SBCWithdrawalContractMock", deployer)
-    factory.attach(deposit.address);
+    // const factory = await ethers.getContractFactory("SBCWithdrawalContractMock", deployer)
+    // factory.attach(deposit.target);
 }
 
 main().catch((error) => {
