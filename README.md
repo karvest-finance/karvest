@@ -10,6 +10,20 @@ This project combines [CoW Hooks](https://beta.docs.cow.fi/cow-protocol/referenc
 - [contracts/](./contracts/): the contracts for the hooked programmatic cow with helpers and claimable contracts.
 - [sdk/](./sdk/): the development kit to interact with the Karvest protocol.
 
+## Transaction Example
+
+[CowExplorer](https://explorer.cow.fi/gc/orders/0xb6beda062432020b8f839a197c334752889d95d5a80daf6f16061c93ac992a09608acd7d1c01439b351fefaff7636a136af3da816589bcc6?tab=overview) | [GnosisScan](https://gnosisscan.io/tx/0xec82ae8b1661ee357ae36cad487b45e9655fe9310a692f9376bd4c9b3121793f)
+
+![tx](./docs/screenshot3.png)
+![tx2](./docs/tx-gnosisscan.png)
+
+#### The Beneficiary
+![safe](./docs/safe.png)
+A [Safe multisig](https://app.safe.global/home?safe=gno:0x608Acd7d1c01439b351FEfAFf7636A136aF3Da81) configured with a [custom FallbackHandler](https://gnosisscan.io/address/0x2f55e8b20d0b9fefa187aa7d00b6cbe563605bf5#code) and [`ComposableCow` as domain verifier](https://gnosisscan.io/address/0xfdafc9d1902f4e0b84f65f49f244b32b31013b74#code) by [this transaction](https://app.safe.global/home?safe=gno:0x608Acd7d1c01439b351FEfAFf7636A136aF3Da81).
+
+More details on this setup [can be found here](https://blog.cow.fi/all-you-need-to-know-about-cow-swaps-new-safe-fallback-handler-8ef0439925d1).
+
+
 ## Getting Started
 
 ### Safe Web App
