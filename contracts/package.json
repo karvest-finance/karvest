@@ -27,6 +27,7 @@
     "@types/chai": "^4.3.10",
     "@types/mocha": "^10.0.4",
     "chai": "^4.3.10",
+    "dotenv": "^16.3.1",
     "hardhat": "^2.19.1",
     "hardhat-gas-reporter": "^1.0.9",
     "prettier": "^3.0.3",
@@ -39,7 +40,8 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^5.0.0"
+    "@openzeppelin/contracts": "^5.0.0",
+    "ethers": "6.8.1"
   },
   "volta": {
     "node": "18.18.2",
