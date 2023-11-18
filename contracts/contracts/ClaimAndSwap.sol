@@ -42,12 +42,10 @@ contract ClaimAndSwap is BaseConditionalOrder {
 
     /**
      * If the conditions are satisfied, return the order that can be filled.
-     * @param owner The owner of the conditional order.
-     * @param ctx The ctx key used for the cabinet in `ComposableCoW`.
      * @param staticInput The ABI encoded `Data` struct.
      * @return order The GPv2Order.Data struct that can be filled.
      */
-    function getTradeableOrder(address owner, address, bytes32 ctx, bytes calldata staticInput, bytes calldata)
+    function getTradeableOrder(address, address, bytes32, bytes calldata staticInput, bytes calldata)
         public
         view
         override
@@ -57,16 +55,16 @@ contract ClaimAndSwap is BaseConditionalOrder {
         _validateData(data);
 
         // TODO - in a latter contract:
-        // 1. Make recurring: use block time n' shit
+        // 1. Make recurring: use block time n' shit (probably need to implement isValidSignature for this)
         // 2. (optional) Use Restaking App Data (a post-hook that deposits.)
         // 3. Delegate a safe (via token approval) to do stuff
         order = GPv2Order.Data(
             data.claimToken,
             data.buyToken,
-            address(0), // TODO - we should probably use address(0) here!
+            address(0), // TODO - we should probably use address(0) here! could also use owner
             depositContract.withdrawableAmount(data.eth1WithdrawAddress), // TODO - use claimable amount here: 
-            1, // Buy amount is a "market order"
-            uint32(block.timestamp + 150), // TODO -- We need to Put order validity here (uint32)
+            1, // Buy amount is a "market order".
+            uint32(block.timestamp + 30 minutes), // TODO -- We need to Put order validity here (uint32)
             data.appData, // Must ensure app data exists already. or the user needs to ensure it exisits on IPFS
             0, // use zero fee for limit orders
             GPv2Order.KIND_SELL, // only sell order support for now
