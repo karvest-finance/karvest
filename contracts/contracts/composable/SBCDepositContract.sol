@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 pragma solidity >=0.7.0 <0.9.0;
 
-
 /* pragma solidity 0.8.9; */
 
 interface IDepositContract {
@@ -30,6 +29,7 @@ interface IDepositContract {
     /// @return The deposit count encoded as a little endian 64-bit number.
     function get_deposit_count() external view returns (bytes memory);
 }
+
 // SPDX--License-Identifier: MIT
 // OpenZeppelin Contracts v4.4.1 (utils/introspection/IERC165.sol)
 
@@ -55,6 +55,7 @@ interface IERC165 {
      */
     function supportsInterface(bytes4 interfaceId) external view returns (bool);
 }
+
 // SPDX--License-Identifier: CC0-1.0
 
 /* pragma solidity 0.8.9; */
@@ -62,6 +63,7 @@ interface IERC165 {
 interface IERC677Receiver {
     function onTokenTransfer(address from, uint256 value, bytes calldata data) external returns (bool);
 }
+
 // SPDX--License-Identifier: CC0-1.0
 
 /* pragma solidity 0.8.9; */
@@ -73,8 +75,7 @@ interface IERC677Receiver {
 contract EIP1967Admin {
     // EIP 1967
     // bytes32(uint256(keccak256('eip1967.proxy.admin')) - 1)
-    uint256 internal constant EIP1967_ADMIN_STORAGE =
-        0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103;
+    uint256 internal constant EIP1967_ADMIN_STORAGE = 0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103;
 
     modifier onlyAdmin() {
         require(msg.sender == _admin());
@@ -87,6 +88,7 @@ contract EIP1967Admin {
         }
     }
 }
+
 // SPDX--License-Identifier: MIT
 // OpenZeppelin Contracts v4.4.1 (utils/Context.sol)
 
@@ -111,6 +113,7 @@ abstract contract Context {
         return msg.data;
     }
 }
+
 // SPDX--License-Identifier: MIT
 // OpenZeppelin Contracts (last updated v4.7.0) (security/Pausable.sol)
 
@@ -215,6 +218,7 @@ abstract contract Pausable is Context {
         emit Unpaused(_msgSender());
     }
 }
+
 // SPDX--License-Identifier: CC0-1.0
 
 /* pragma solidity 0.8.9; */
@@ -234,6 +238,7 @@ contract PausableEIP1967Admin is EIP1967Admin, Pausable {
         _unpause();
     }
 }
+
 // SPDX--License-Identifier: MIT
 // OpenZeppelin Contracts (last updated v4.6.0) (token/ERC20/IERC20.sol)
 
@@ -310,12 +315,9 @@ interface IERC20 {
      *
      * Emits a {Transfer} event.
      */
-    function transferFrom(
-        address from,
-        address to,
-        uint256 amount
-    ) external returns (bool);
+    function transferFrom(address from, address to, uint256 amount) external returns (bool);
 }
+
 // SPDX--License-Identifier: CC0-1.0
 
 /* pragma solidity 0.8.9; */
@@ -358,6 +360,7 @@ contract Claimable {
         IERC20(_token).transfer(_to, balance);
     }
 }
+
 // SPDX--License-Identifier: CC0-1.0
 
 /* pragma solidity 0.8.9; */
@@ -382,6 +385,7 @@ interface IWithdrawalContract {
         address[] calldata _addresses
     ) external;
 }
+
 // SPDX--License-Identifier: MIT
 // OpenZeppelin Contracts (last updated v4.8.0) (utils/Address.sol)
 
@@ -476,11 +480,7 @@ library Address {
      *
      * _Available since v3.1._
      */
-    function functionCall(
-        address target,
-        bytes memory data,
-        string memory errorMessage
-    ) internal returns (bytes memory) {
+    function functionCall(address target, bytes memory data, string memory errorMessage) internal returns (bytes memory) {
         return functionCallWithValue(target, data, 0, errorMessage);
     }
 
@@ -495,11 +495,7 @@ library Address {
      *
      * _Available since v3.1._
      */
-    function functionCallWithValue(
-        address target,
-        bytes memory data,
-        uint256 value
-    ) internal returns (bytes memory) {
+    function functionCallWithValue(address target, bytes memory data, uint256 value) internal returns (bytes memory) {
         return functionCallWithValue(target, data, value, "Address: low-level call with value failed");
     }
 
@@ -536,11 +532,7 @@ library Address {
      *
      * _Available since v3.3._
      */
-    function functionStaticCall(
-        address target,
-        bytes memory data,
-        string memory errorMessage
-    ) internal view returns (bytes memory) {
+    function functionStaticCall(address target, bytes memory data, string memory errorMessage) internal view returns (bytes memory) {
         (bool success, bytes memory returndata) = target.staticcall(data);
         return verifyCallResultFromTarget(target, success, returndata, errorMessage);
     }
@@ -561,11 +553,7 @@ library Address {
      *
      * _Available since v3.4._
      */
-    function functionDelegateCall(
-        address target,
-        bytes memory data,
-        string memory errorMessage
-    ) internal returns (bytes memory) {
+    function functionDelegateCall(address target, bytes memory data, string memory errorMessage) internal returns (bytes memory) {
         (bool success, bytes memory returndata) = target.delegatecall(data);
         return verifyCallResultFromTarget(target, success, returndata, errorMessage);
     }
@@ -600,11 +588,7 @@ library Address {
      *
      * _Available since v4.3._
      */
-    function verifyCallResult(
-        bool success,
-        bytes memory returndata,
-        string memory errorMessage
-    ) internal pure returns (bytes memory) {
+    function verifyCallResult(bool success, bytes memory returndata, string memory errorMessage) internal pure returns (bytes memory) {
         if (success) {
             return returndata;
         } else {
@@ -626,6 +610,7 @@ library Address {
         }
     }
 }
+
 // SPDX--License-Identifier: MIT
 // OpenZeppelin Contracts v4.4.1 (token/ERC20/extensions/draft-IERC20Permit.sol)
 
@@ -661,15 +646,7 @@ interface IERC20Permit {
      * https://eips.ethereum.org/EIPS/eip-2612#specification[relevant EIP
      * section].
      */
-    function permit(
-        address owner,
-        address spender,
-        uint256 value,
-        uint256 deadline,
-        uint8 v,
-        bytes32 r,
-        bytes32 s
-    ) external;
+    function permit(address owner, address spender, uint256 value, uint256 deadline, uint8 v, bytes32 r, bytes32 s) external;
 
     /**
      * @dev Returns the current nonce for `owner`. This value must be
@@ -686,6 +663,7 @@ interface IERC20Permit {
     // solhint-disable-next-line func-name-mixedcase
     function DOMAIN_SEPARATOR() external view returns (bytes32);
 }
+
 // SPDX--License-Identifier: MIT
 // OpenZeppelin Contracts (last updated v4.8.0) (token/ERC20/utils/SafeERC20.sol)
 
@@ -706,20 +684,11 @@ interface IERC20Permit {
 library SafeERC20 {
     using Address for address;
 
-    function safeTransfer(
-        IERC20 token,
-        address to,
-        uint256 value
-    ) internal {
+    function safeTransfer(IERC20 token, address to, uint256 value) internal {
         _callOptionalReturn(token, abi.encodeWithSelector(token.transfer.selector, to, value));
     }
 
-    function safeTransferFrom(
-        IERC20 token,
-        address from,
-        address to,
-        uint256 value
-    ) internal {
+    function safeTransferFrom(IERC20 token, address from, address to, uint256 value) internal {
         _callOptionalReturn(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));
     }
 
@@ -730,35 +699,20 @@ library SafeERC20 {
      * Whenever possible, use {safeIncreaseAllowance} and
      * {safeDecreaseAllowance} instead.
      */
-    function safeApprove(
-        IERC20 token,
-        address spender,
-        uint256 value
-    ) internal {
+    function safeApprove(IERC20 token, address spender, uint256 value) internal {
         // safeApprove should only be called when setting an initial allowance,
         // or when resetting it to zero. To increase and decrease it, use
         // 'safeIncreaseAllowance' and 'safeDecreaseAllowance'
-        require(
-            (value == 0) || (token.allowance(address(this), spender) == 0),
-            "SafeERC20: approve from non-zero to non-zero allowance"
-        );
+        require((value == 0) || (token.allowance(address(this), spender) == 0), "SafeERC20: approve from non-zero to non-zero allowance");
         _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));
     }
 
-    function safeIncreaseAllowance(
-        IERC20 token,
-        address spender,
-        uint256 value
-    ) internal {
+    function safeIncreaseAllowance(IERC20 token, address spender, uint256 value) internal {
         uint256 newAllowance = token.allowance(address(this), spender) + value;
         _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, newAllowance));
     }
 
-    function safeDecreaseAllowance(
-        IERC20 token,
-        address spender,
-        uint256 value
-    ) internal {
+    function safeDecreaseAllowance(IERC20 token, address spender, uint256 value) internal {
         unchecked {
             uint256 oldAllowance = token.allowance(address(this), spender);
             require(oldAllowance >= value, "SafeERC20: decreased allowance below zero");
@@ -801,6 +755,7 @@ library SafeERC20 {
         }
     }
 }
+
 // SPDX--License-Identifier: CC0-1.0
 
 /* pragma solidity 0.8.9; */
@@ -815,6 +770,7 @@ interface IUnwrapper {
      */
     function unwrap(address _token, uint256 _amount) external returns (uint256);
 }
+
 // SPDX--License-Identifier: CC0-1.0
 
 /* pragma solidity 0.8.9; */
@@ -833,14 +789,7 @@ interface IUnwrapper {
  * @dev Implementation of the ERC20 ETH2.0 deposit contract.
  * For the original implementation, see the Phase 0 specification under https://github.com/ethereum/eth2.0-specs
  */
-contract SBCDepositContract is
-    IDepositContract,
-    IERC165,
-    IERC677Receiver,
-    PausableEIP1967Admin,
-    Claimable,
-    IWithdrawalContract
-{
+contract SBCDepositContract is IDepositContract, IERC165, IERC677Receiver, PausableEIP1967Admin, Claimable, IWithdrawalContract {
     using SafeERC20 for IERC20;
 
     uint256 private constant DEPOSIT_CONTRACT_TREE_DEPTH = 32;
@@ -917,11 +866,7 @@ contract SBCDepositContract is
         }
     }
 
-    function onTokenTransfer(
-        address,
-        uint256 stake_amount,
-        bytes calldata data
-    ) external override whenNotPaused returns (bool) {
+    function onTokenTransfer(address, uint256 stake_amount, bytes calldata data) external override whenNotPaused returns (bool) {
         require(msg.sender == address(stake_token), "DepositContract: not a deposit token");
         require(data.length % 176 == 32, "DepositContract: incorrect deposit data length");
         uint256 count = data.length / 176;
@@ -966,22 +911,13 @@ contract SBCDepositContract is
 
         // Emit `DepositEvent` log
         bytes memory amount = to_little_endian_64(uint64(deposit_amount));
-        emit DepositEvent(
-            pubkey,
-            withdrawal_credentials,
-            amount,
-            signature,
-            to_little_endian_64(uint64(deposit_count))
-        );
+        emit DepositEvent(pubkey, withdrawal_credentials, amount, signature, to_little_endian_64(uint64(deposit_count)));
 
         // Compute deposit data root (`DepositData` hash tree root)
         bytes32 pubkey_root = sha256(abi.encodePacked(pubkey, bytes16(0)));
         bytes32[3] memory sig_parts = abi.decode(signature, (bytes32[3]));
         bytes32 signature_root = sha256(
-            abi.encodePacked(
-                sha256(abi.encodePacked(sig_parts[0], sig_parts[1])),
-                sha256(abi.encodePacked(sig_parts[2], bytes32(0)))
-            )
+            abi.encodePacked(sha256(abi.encodePacked(sig_parts[0], sig_parts[1])), sha256(abi.encodePacked(sig_parts[2], bytes32(0))))
         );
         bytes32 node = sha256(
             abi.encodePacked(
@@ -991,10 +927,7 @@ contract SBCDepositContract is
         );
 
         // Verify computed and expected deposit data roots match
-        require(
-            node == deposit_data_root,
-            "DepositContract: reconstructed DepositData does not match supplied deposit_data_root"
-        );
+        require(node == deposit_data_root, "DepositContract: reconstructed DepositData does not match supplied deposit_data_root");
 
         // Avoid overflowing the Merkle tree (and prevent edge case in computing `branch`)
         require(deposit_count < MAX_DEPOSIT_COUNT, "DepositContract: merkle tree full");
@@ -1087,11 +1020,7 @@ contract SBCDepositContract is
      * @param _amounts Array of amounts to be withdrawn.
      * @param _addresses Array of addresses that should receive the corresponding amount of tokens.
      */
-    function executeSystemWithdrawals(
-        uint256 /* _deprecatedUnused */,
-        uint64[] calldata _amounts,
-        address[] calldata _addresses
-    ) public {
+    function executeSystemWithdrawals(uint256 /* _deprecatedUnused */, uint64[] calldata _amounts, address[] calldata _addresses) public {
         require(
             _msgSender() == SYSTEM_WITHDRAWAL_EXECUTOR || _msgSender() == _admin(),
             "This function should be called only by SYSTEM_WITHDRAWAL_EXECUTOR or _admin()"

@@ -3,7 +3,6 @@ pragma solidity >=0.8.0 <0.9.0;
 
 import {IERC20} from "./composable/IERC20.sol";
 
-
 import {ComposableCoW} from "./composable/ComposableCoW.sol";
 import {GPv2Order} from "./composable/GPv2Order.sol";
 import "./composable/BaseConditionalOrder.sol";
@@ -68,12 +67,13 @@ contract DutchAuction is BaseConditionalOrder {
      * @param staticInput The ABI encoded `Data` struct.
      * @return order The GPv2Order.Data struct that can be filled.
      */
-    function getTradeableOrder(address owner, address, bytes32 ctx, bytes calldata staticInput, bytes calldata)
-        public
-        view
-        override
-        returns (GPv2Order.Data memory order)
-    {
+    function getTradeableOrder(
+        address owner,
+        address,
+        bytes32 ctx,
+        bytes calldata staticInput,
+        bytes calldata
+    ) public view override returns (GPv2Order.Data memory order) {
         Data memory data = abi.decode(staticInput, (Data));
         _validateData(data);
 

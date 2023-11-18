@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 pragma solidity >=0.8.0 <0.9.0;
+
 /* pragma solidity >=0.7.0 <0.9.0; */
 
 /**
@@ -12,6 +13,7 @@ abstract contract Singleton {
     // It should also always be ensured the address is stored alone (uses a full word)
     address private singleton;
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 
@@ -30,6 +32,7 @@ abstract contract NativeCurrencyPaymentFallback {
         emit SafeReceived(msg.sender, msg.value);
     }
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 
@@ -48,6 +51,7 @@ abstract contract SelfAuthorized {
         _;
     }
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 
@@ -61,6 +65,7 @@ abstract contract Enum {
         DelegateCall
     }
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 /* import "../common/Enum.sol"; */
@@ -101,6 +106,7 @@ abstract contract Executor {
         }
     }
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 /* import "../common/Enum.sol"; */
@@ -292,6 +298,7 @@ abstract contract ModuleManager is SelfAuthorized, Executor {
         return size > 0;
     }
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 /* import "../common/SelfAuthorized.sol"; */
@@ -453,6 +460,7 @@ abstract contract OwnerManager is SelfAuthorized {
         return array;
     }
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 
@@ -489,6 +497,7 @@ abstract contract SignatureDecoder {
         }
     }
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 
@@ -527,6 +536,7 @@ abstract contract SecuredTokenTransfer {
         }
     }
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 
@@ -547,6 +557,7 @@ abstract contract ISignatureValidator is ISignatureValidatorConstants {
      */
     function isValidSignature(bytes memory _data, bytes memory _signature) public view virtual returns (bytes4);
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 /* import "../common/SelfAuthorized.sol"; */
@@ -628,6 +639,7 @@ abstract contract FallbackManager is SelfAuthorized {
         }
     }
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 
@@ -679,6 +691,7 @@ abstract contract StorageAccessible {
         }
     }
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 
@@ -694,6 +707,7 @@ interface IERC165 {
      */
     function supportsInterface(bytes4 interfaceId) external view returns (bool);
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 /* import "../common/Enum.sol"; */
@@ -772,6 +786,7 @@ abstract contract GuardManager is SelfAuthorized {
         }
     }
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 
@@ -836,6 +851,7 @@ library SafeMath {
         return a >= b ? a : b;
     }
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 /* import "./base/ModuleManager.sol"; */
@@ -1276,6 +1292,7 @@ contract Safe is
         return keccak256(encodeTransactionData(to, value, data, operation, safeTxGas, baseGas, gasPrice, gasToken, refundReceiver, _nonce));
     }
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 /* import "./Base.sol"; */
@@ -1354,7 +1371,6 @@ abstract contract HandlerContext {
         return msg.sender;
     }
 }
-
 
 /**
  * @title Base contract for Extensible Fallback Handlers
@@ -1558,6 +1574,7 @@ library EIP712 {
         return abi.encodePacked(bytes1(0x19), bytes1(0x01), domainSeparator, keccak256(abi.encodePacked(typeHash, message)));
     }
 }
+
 // SPDX--License-Identifier: GPL-3.0
 /* pragma solidity >=0.8.0 <0.9.0; */
 /* import {MerkleProof} from "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol"; */
@@ -1644,9 +1661,7 @@ contract ComposableCoW is ISafeSignatureVerifier {
      * @param factory A factory from which to get a value to store in the cabinet related to the merkle root
      * @param data Implementation specific off-chain data
      */
-    function setRootWithContext(bytes32 root, Proof calldata proof, IValueFactory factory, bytes calldata data)
-        external
-    {
+    function setRootWithContext(bytes32 root, Proof calldata proof, IValueFactory factory, bytes calldata data) external {
         setRoot(root, proof);
 
         // Default to the zero slot for a merkle root as this is the most common use case
@@ -1780,9 +1795,9 @@ contract ComposableCoW is ISafeSignatureVerifier {
         bytes32 ctx = _auth(owner, params, proof);
 
         // Make sure the handler supports `IConditionalOrderGenerator`
-        try IConditionalOrderGenerator(address(params.handler)).supportsInterface(
-            type(IConditionalOrderGenerator).interfaceId
-        ) returns (bool supported) {
+        try IConditionalOrderGenerator(address(params.handler)).supportsInterface(type(IConditionalOrderGenerator).interfaceId) returns (
+            bool supported
+        ) {
             if (!supported) {
                 revert InterfaceNotSupported();
             }
@@ -1791,7 +1806,11 @@ contract ComposableCoW is ISafeSignatureVerifier {
         }
 
         order = IConditionalOrderGenerator(address(params.handler)).getTradeableOrder(
-            owner, msg.sender, ctx, params.staticInput, offchainInput
+            owner,
+            msg.sender,
+            ctx,
+            params.staticInput,
+            offchainInput
         );
 
         // Check with the swap guard if the order is restricted or not
@@ -1799,9 +1818,7 @@ contract ComposableCoW is ISafeSignatureVerifier {
             revert SwapGuardRestricted();
         }
 
-        try ExtensibleFallbackHandler(owner).supportsInterface(type(ISignatureVerifierMuxer).interfaceId) returns (
-            bool supported
-        ) {
+        try ExtensibleFallbackHandler(owner).supportsInterface(type(ISignatureVerifierMuxer).interfaceId) returns (bool supported) {
             if (!supported) {
                 revert InvalidFallbackHandler();
             }
@@ -1839,11 +1856,11 @@ contract ComposableCoW is ISafeSignatureVerifier {
      * @param params that uniquely identify the order
      * @param proof to assert that H(params) is in the merkle tree (optional)
      */
-    function _auth(address owner, IConditionalOrder.ConditionalOrderParams memory params, bytes32[] memory proof)
-        internal
-        view
-        returns (bytes32 ctx)
-    {
+    function _auth(
+        address owner,
+        IConditionalOrder.ConditionalOrderParams memory params,
+        bytes32[] memory proof
+    ) internal view returns (bytes32 ctx) {
         if (proof.length != 0) {
             /// @dev Computing proof using leaf double hashing
             bytes32 leaf = keccak256(bytes.concat(hash(params)));
@@ -1883,6 +1900,7 @@ contract ComposableCoW is ISafeSignatureVerifier {
         return true;
     }
 }
+
 // SPDX--License-Identifier: LGPL-3.0-or-later
 /* pragma solidity >=0.8.0 <0.9.0; */
 /* import "@openzeppelin/contracts/interfaces/IERC20.sol"; */
@@ -1928,8 +1946,7 @@ library GPv2Order {
     ///     ")"
     /// )
     /// ```
-    bytes32 internal constant TYPE_HASH =
-        hex"d5a25ba2e97094ad7d83dc28a6572da797d6b3e7fc6663bd93efb789fc17e489";
+    bytes32 internal constant TYPE_HASH = hex"d5a25ba2e97094ad7d83dc28a6572da797d6b3e7fc6663bd93efb789fc17e489";
 
     /// @dev The marker value for a sell order for computing the order struct
     /// hash. This allows the EIP-712 compatible wallets to display a
@@ -1939,8 +1956,7 @@ library GPv2Order {
     /// ```
     /// keccak256("sell")
     /// ```
-    bytes32 internal constant KIND_SELL =
-        hex"f3b277728b3fee749481eb3e0b3b48980dbbab78658fc419025cb16eee346775";
+    bytes32 internal constant KIND_SELL = hex"f3b277728b3fee749481eb3e0b3b48980dbbab78658fc419025cb16eee346775";
 
     /// @dev The OrderKind marker value for a buy order for computing the order
     /// struct hash.
@@ -1949,8 +1965,7 @@ library GPv2Order {
     /// ```
     /// keccak256("buy")
     /// ```
-    bytes32 internal constant KIND_BUY =
-        hex"6ed88e868af0a1983e3886d5f3e95a2fafbd6c3450bc229e27342283dc429ccc";
+    bytes32 internal constant KIND_BUY = hex"6ed88e868af0a1983e3886d5f3e95a2fafbd6c3450bc229e27342283dc429ccc";
 
     /// @dev The TokenBalance marker value for using direct ERC20 balances for
     /// computing the order struct hash.
@@ -1959,8 +1974,7 @@ library GPv2Order {
     /// ```
     /// keccak256("erc20")
     /// ```
-    bytes32 internal constant BALANCE_ERC20 =
-        hex"5a28e9363bb942b639270062aa6bb295f434bcdfc42c97267bf003f272060dc9";
+    bytes32 internal constant BALANCE_ERC20 = hex"5a28e9363bb942b639270062aa6bb295f434bcdfc42c97267bf003f272060dc9";
 
     /// @dev The TokenBalance marker value for using Balancer Vault external
     /// balances (in order to re-use Vault ERC20 approvals) for computing the
@@ -1970,8 +1984,7 @@ library GPv2Order {
     /// ```
     /// keccak256("external")
     /// ```
-    bytes32 internal constant BALANCE_EXTERNAL =
-        hex"abee3b73373acd583a130924aad6dc38cfdc44ba0555ba94ce2ff63980ea0632";
+    bytes32 internal constant BALANCE_EXTERNAL = hex"abee3b73373acd583a130924aad6dc38cfdc44ba0555ba94ce2ff63980ea0632";
 
     /// @dev The TokenBalance marker value for using Balancer Vault internal
     /// balances for computing the order struct hash.
@@ -1980,8 +1993,7 @@ library GPv2Order {
     /// ```
     /// keccak256("internal")
     /// ```
-    bytes32 internal constant BALANCE_INTERNAL =
-        hex"4ac99ace14ee0a5ef932dc609df0943ab7ac16b7583634612f8dc35a4289a6ce";
+    bytes32 internal constant BALANCE_INTERNAL = hex"4ac99ace14ee0a5ef932dc609df0943ab7ac16b7583634612f8dc35a4289a6ce";
 
     /// @dev Marker address used to indicate that the receiver of the trade
     /// proceeds should the owner of the order.
@@ -1998,11 +2010,7 @@ library GPv2Order {
     /// it is the same as the order owner.
     ///
     /// @return receiver The actual receiver of trade proceeds.
-    function actualReceiver(Data memory order, address owner)
-        internal
-        pure
-        returns (address receiver)
-    {
+    function actualReceiver(Data memory order, address owner) internal pure returns (address receiver) {
         if (order.receiver == RECEIVER_SAME_AS_OWNER) {
             receiver = owner;
         } else {
@@ -2015,11 +2023,7 @@ library GPv2Order {
     /// @param order The order to compute the EIP-712 signing hash for.
     /// @param domainSeparator The EIP-712 domain separator to use.
     /// @return orderDigest The 32 byte EIP-712 struct hash.
-    function hash(Data memory order, bytes32 domainSeparator)
-        internal
-        pure
-        returns (bytes32 orderDigest)
-    {
+    function hash(Data memory order, bytes32 domainSeparator) internal pure returns (bytes32 orderDigest) {
         bytes32 structHash;
 
         // NOTE: Compute the EIP-712 order struct hash in place. As suggested
@@ -2061,12 +2065,7 @@ library GPv2Order {
     /// parameters.
     /// @param owner The address of the user who owns this order.
     /// @param validTo The epoch time at which the order will stop being valid.
-    function packOrderUidParams(
-        bytes memory orderUid,
-        bytes32 orderDigest,
-        address owner,
-        uint32 validTo
-    ) internal pure {
+    function packOrderUidParams(bytes memory orderUid, bytes32 orderDigest, address owner, uint32 validTo) internal pure {
         require(orderUid.length == UID_LENGTH, "GPv2: uid buffer overflow");
 
         // NOTE: Write the order UID to the allocated memory buffer. The order
@@ -2109,15 +2108,7 @@ library GPv2Order {
     /// parameters.
     /// @return owner The address of the user who owns this order.
     /// @return validTo The epoch time at which the order will stop being valid.
-    function extractOrderUidParams(bytes calldata orderUid)
-        internal
-        pure
-        returns (
-            bytes32 orderDigest,
-            address owner,
-            uint32 validTo
-        )
-    {
+    function extractOrderUidParams(bytes calldata orderUid) internal pure returns (bytes32 orderDigest, address owner, uint32 validTo) {
         require(orderUid.length == UID_LENGTH, "GPv2: invalid uid");
 
         // Use assembly to efficiently decode packed calldata.
@@ -2129,6 +2120,7 @@ library GPv2Order {
         }
     }
 }
+
 // SPDX--License-Identifier: GPL-3.0
 /* pragma solidity >=0.8.0 <0.9.0; */
 /* import {GPv2Order} from "cowprotocol/libraries/GPv2Order.sol"; */
@@ -2212,6 +2204,7 @@ interface IConditionalOrderGenerator is IConditionalOrder, IERC165 {
         bytes calldata offchainInput
     ) external view returns (GPv2Order.Data memory);
 }
+
 // SPDX--License-Identifier: GPL-3.0
 /* pragma solidity >=0.8.0 <0.9.0; */
 /* import {GPv2Order} from "cowprotocol/libraries/GPv2Order.sol"; */
@@ -2238,12 +2231,14 @@ interface ISwapGuard is IERC165 {
         bytes calldata offchainInput
     ) external view returns (bool);
 }
+
 // SPDX--License-Identifier: MIT
 /* pragma solidity >=0.8.0 <0.9.0; */
 
 interface CoWSettlement {
     function domainSeparator() external view returns (bytes32);
 }
+
 // SPDX--License-Identifier: GPL-3.0
 /* pragma solidity >=0.8.0 <0.9.0; */
 
@@ -2260,6 +2255,7 @@ interface IValueFactory {
      */
     function getValue(bytes calldata data) external view returns (bytes32 value);
 }
+
 // SPDX--License-Identifier: MIT
 // OpenZeppelin Contracts (last updated v4.9.2) (utils/cryptography/MerkleProof.sol)
 
@@ -2402,9 +2398,7 @@ library MerkleProof {
         //   `proof` array.
         for (uint256 i = 0; i < totalHashes; i++) {
             bytes32 a = leafPos < leavesLen ? leaves[leafPos++] : hashes[hashPos++];
-            bytes32 b = proofFlags[i]
-                ? (leafPos < leavesLen ? leaves[leafPos++] : hashes[hashPos++])
-                : proof[proofPos++];
+            bytes32 b = proofFlags[i] ? (leafPos < leavesLen ? leaves[leafPos++] : hashes[hashPos++]) : proof[proofPos++];
             hashes[i] = _hashPair(a, b);
         }
 
@@ -2456,9 +2450,7 @@ library MerkleProof {
         //   `proof` array.
         for (uint256 i = 0; i < totalHashes; i++) {
             bytes32 a = leafPos < leavesLen ? leaves[leafPos++] : hashes[hashPos++];
-            bytes32 b = proofFlags[i]
-                ? (leafPos < leavesLen ? leaves[leafPos++] : hashes[hashPos++])
-                : proof[proofPos++];
+            bytes32 b = proofFlags[i] ? (leafPos < leavesLen ? leaves[leafPos++] : hashes[hashPos++]) : proof[proofPos++];
             hashes[i] = _hashPair(a, b);
         }
 
@@ -2487,6 +2479,7 @@ library MerkleProof {
         }
     }
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 
@@ -2534,6 +2527,7 @@ library MarshalLib {
         }
     }
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 /* import {Safe} from "../../Safe.sol"; */
@@ -2588,6 +2582,7 @@ abstract contract FallbackHandler is ExtensibleBase, IFallbackHandler {
         }
     }
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 
@@ -2635,6 +2630,7 @@ interface ERC1155TokenReceiver {
         bytes calldata _data
     ) external returns (bytes4);
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 
@@ -2656,6 +2652,7 @@ interface ERC721TokenReceiver {
      */
     function onERC721Received(address _operator, address _from, uint256 _tokenId, bytes calldata _data) external returns (bytes4);
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 /* import "../../interfaces/ERC1155TokenReceiver.sol"; */
@@ -2701,6 +2698,7 @@ abstract contract TokenCallbacks is ExtensibleBase, ERC1155TokenReceiver, ERC721
         return 0x150b7a02;
     }
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 /* import {IERC165} from "../../interfaces/IERC165.sol"; */
@@ -2813,6 +2811,7 @@ abstract contract ERC165Handler is ExtensibleBase, IERC165Handler {
      */
     function _supportsInterface(bytes4 interfaceId) internal view virtual returns (bool);
 }
+
 // SPDX--License-Identifier: LGPL-3.0-only
 /* pragma solidity >=0.7.0 <0.9.0; */
 /* import "./extensible/FallbackHandler.sol"; */
@@ -2840,6 +2839,7 @@ contract ExtensibleFallbackHandler is FallbackHandler, SignatureVerifierMuxer, T
             interfaceId == type(ERC1155TokenReceiver).interfaceId;
     }
 }
+
 // SPDX--License-Identifier: LGPL-3.0-or-later
 /* pragma solidity >=0.8.0 <0.9.0; */
 
@@ -2873,17 +2873,7 @@ library GPv2Interaction {
         assembly {
             let freeMemoryPointer := mload(0x40)
             calldatacopy(freeMemoryPointer, callData.offset, callData.length)
-            if iszero(
-                call(
-                    gas(),
-                    target,
-                    value,
-                    freeMemoryPointer,
-                    callData.length,
-                    0,
-                    0
-                )
-            ) {
+            if iszero(call(gas(), target, value, freeMemoryPointer, callData.length, 0, 0)) {
                 returndatacopy(0, 0, returndatasize())
                 revert(0, returndatasize())
             }
@@ -2895,11 +2885,7 @@ library GPv2Interaction {
     /// @param interaction Interaction data.
     /// @return result The 4 byte function selector of the call encoded in
     /// this interaction.
-    function selector(Data calldata interaction)
-        internal
-        pure
-        returns (bytes4 result)
-    {
+    function selector(Data calldata interaction) internal pure returns (bytes4 result) {
         bytes calldata callData = interaction.callData;
         if (callData.length >= 4) {
             // NOTE: Read the first word of the interaction's calldata. The
@@ -2915,6 +2901,7 @@ library GPv2Interaction {
         }
     }
 }
+
 // SPDX--License-Identifier: MIT
 // OpenZeppelin Contracts v4.4.1 (interfaces/IERC20.sol)
 

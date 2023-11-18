@@ -3,7 +3,6 @@ pragma solidity >=0.8.0 <0.9.0;
 
 import {IERC20} from "./composable/IERC20.sol";
 
-
 import {ComposableCoW} from "./composable/ComposableCoW.sol";
 import {GPv2Order} from "./composable/GPv2Order.sol";
 import {SBCDepositContract} from "./composable/SBCDepositContract.sol";
@@ -45,12 +44,13 @@ contract ClaimAndSwap is BaseConditionalOrder {
      * @param staticInput The ABI encoded `Data` struct.
      * @return order The GPv2Order.Data struct that can be filled.
      */
-    function getTradeableOrder(address, address, bytes32, bytes calldata staticInput, bytes calldata)
-        public
-        view
-        override
-        returns (GPv2Order.Data memory order)
-    {
+    function getTradeableOrder(
+        address,
+        address,
+        bytes32,
+        bytes calldata staticInput,
+        bytes calldata
+    ) public view override returns (GPv2Order.Data memory order) {
         Data memory data = abi.decode(staticInput, (Data));
         _validateData(data);
 
@@ -62,7 +62,7 @@ contract ClaimAndSwap is BaseConditionalOrder {
             data.claimToken,
             data.buyToken,
             address(0), // TODO - we should probably use address(0) here! could also use owner
-            depositContract.withdrawableAmount(data.eth1WithdrawAddress), // TODO - use claimable amount here: 
+            depositContract.withdrawableAmount(data.eth1WithdrawAddress), // TODO - use claimable amount here:
             1, // Buy amount is a "market order".
             uint32(block.timestamp + 30 minutes), // TODO -- We need to Put order validity here (uint32)
             data.appData, // Must ensure app data exists already. or the user needs to ensure it exisits on IPFS

@@ -9,7 +9,7 @@
     "test": "hardhat test",
     "coverage": "hardhat coverage",
     "fmt:sol": "prettier 'contracts/**/*.sol' -w",
-    "fmt:ts": "prettier 'test/**/*.ts' -w",
+    "fmt:ts": "prettier 'test/**/*.ts' -w && prettier 'scripts/**/*.ts' -w",
     "fmt": "yarn fmt:ts && yarn fmt:sol",
     "lint": "yarn lint:sol && yarn lint:ts",
     "lint:sol": "solhint 'contracts/**/*.sol'",
