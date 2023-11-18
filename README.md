@@ -8,7 +8,7 @@ This project combines [CoW Hooks](https://beta.docs.cow.fi/cow-protocol/referenc
 
 - [app/](./app/): the web app to interact with the Karvest protocol from a Safe or EOA.
 - [contracts/](./contracts/): the contracts for the hooked programmatic cow with helpers and claimable contracts.
-- [sdk](./sdk/): the scripts to interact with the Karvest protocol from a Safe or an EOA.
+- [sdk](./sdk/): the development kit to interact with the Karvest protocol.
 
 ## Getting Started
 
