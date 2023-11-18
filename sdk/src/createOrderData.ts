@@ -18,16 +18,19 @@ const CLAIM_AND_SWAP_CONTRACT = "0x35f29f3cb53bddb11b6e286a0454a9224dd3adaa";
 async function buildCreateOrderData() {
   // TODO - generate and post app data use hash below.
   const appData = await safeOnlyAppData(SAFE_ADDRESS, CLAIM_CONTRACT_ADDRESS);
-  const thirdParameter = ethers.utils.defaultAbiCoder.encode(
+  const staticOrderData = ethers.utils.defaultAbiCoder.encode(
     ["address", "address", "address", "bytes32"],
     [CLAIM_TOKEN_ADDRESS, BUY_TOKEN_ADDRESS, SAFE_ADDRESS, appData.hash]
   );
 
   const params = [
+    // handlerAddress
     CLAIM_AND_SWAP_CONTRACT,
+    // Order Salt
     // keccak("karvest");
+    // TODO - This needs to be changed for every new order placement.
     "0x5cac3505cb5ef10c425e9385b61b0bc2f433203871d18aca2409326bd98b0529",
-    thirdParameter,
+    staticOrderData,
   ];
 
   console.log("params", params);

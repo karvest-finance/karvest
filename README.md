@@ -35,13 +35,15 @@ yarn install
 yarn start
 ```
 
+Then the app can be added manually in the Safe App interface ("Add Custom Safe App").
+
 ### Contracts
 
 | Contract | Description | Address on Gnosis Chain |
 | --- | --- | --- |
 | **ClaimAndSwap** | Hooked programmatic cow | [0x35f29f3cb53bddb11b6e286a0454a9224dd3adaa](https://gnosisscan.io/address/0x35f29f3cb53bddb11b6e286a0454a9224dd3adaa#code) |
 | **TransferBalance** | Helper for the programmatic cow | [0xD4121d2d90CE7C5F7FB66c4E96815fc377481635](https://gnosisscan.io/address/0xD4121d2d90CE7C5F7FB66c4E96815fc377481635#code)
-| **SBCDEpositContractMock** | Example of claim contract: </br> Mock of the beacon chain deposit contract | [0xF07AFCEe9dD0B859edD41603A3D725b70086fEF6](https://gnosisscan.io/address/0xF07AFCEe9dD0B859edD41603A3D725b70086fEF6#code) |
+| **SBCDepositContractMock** | Example of claim contract: </br> Mock of the beacon chain deposit contract | [0xF07AFCEe9dD0B859edD41603A3D725b70086fEF6](https://gnosisscan.io/address/0xF07AFCEe9dD0B859edD41603A3D725b70086fEF6#code) |
 
 #### Deploy the Claim & Swap Contract
 
@@ -60,7 +62,7 @@ It points to the [ComposableCow](https://gnosisscan.io/address/0xfdafc9d1902f4e0
 
 [Sample EOA Transaction](https://gnosisscan.io/tx/0xadacb7d0862c0f4f341edcfb4ab9746995ef609bb543cbfbccba62b7ef29824a) generated with `run-eoa`
 1. Claims Validator Rewards
-2. Swaps (not all but some) for COW token.
+2. Swaps the claimed amount for COW token.
 3. See the [order in explorer](https://explorer.cow.fi/gc/orders/0xf607a7dff5adf19906db638ebaba314444ba532877548590d4011e5adff628ab7f01d9b227593e033bf8d6fc86e634d27aa855686558d70b?tab=overview).
 
 [Sample Safe Programatic Order](https://gnosisscan.io/tx/0xec82ae8b1661ee357ae36cad487b45e9655fe9310a692f9376bd4c9b3121793f) execution 
