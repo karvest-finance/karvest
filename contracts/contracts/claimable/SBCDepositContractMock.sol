@@ -1,14 +1,13 @@
-// SPDX--License-Identifier: MIT
+// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.20;
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "./ISBCDepositContract.sol";
 
-/**
- * @title SBCDepositContractMock
- * @dev Mock implementation of the ERC20 ETH2.0 deposit contract.
- */
-contract SBCDepositContractMock {
+/// @title SBCDepositContractMock
+/// @dev Mock implementation of the ERC20 ETH2.0 deposit contract.
+contract SBCDepositContractMock is ISBCDepositContract {
     using SafeERC20 for IERC20;
 
     // ************************************* //
@@ -75,10 +74,7 @@ contract SBCDepositContractMock {
     // *         State Modifiers           * //
     // ************************************* //
 
-    /**
-     * @dev Claim withdrawal amount for an address
-     * @param _address Address to transfer withdrawable tokens
-     */
+    /// @inheritdoc ISBCDepositContract
     function claimWithdrawal(address _address) public {
         uint256 claimable = withdrawableAmount(_address);
         if (claimable > 0) {
@@ -86,10 +82,7 @@ contract SBCDepositContractMock {
         }
     }
 
-    /**
-     * @dev Claim withdrawal amounts for an array of addresses
-     * @param _addresses Addresses to transfer withdrawable tokens
-     */
+    /// @inheritdoc ISBCDepositContract
     function claimWithdrawals(address[] calldata _addresses) external {
         revert UnsupportedOperation();
     }

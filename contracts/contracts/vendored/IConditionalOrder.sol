@@ -3,7 +3,7 @@ pragma solidity >=0.8.0 <0.9.0;
 
 import {GPv2Order} from ".//GPv2Order.sol";
 import {GPv2Interaction} from "./GPv2Interaction.sol";
-import {IERC165} from "./IERC165.sol";
+import {IERC165} from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 
 /**
  * @title Conditional Order Interface

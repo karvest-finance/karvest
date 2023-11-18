@@ -1,12 +1,11 @@
-// SPDX-License-Identifier: GPL-3.0
+// SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-import {IERC20} from "./composable/IERC20.sol";
-
-import {ComposableCoW} from "./composable/ComposableCoW.sol";
-import {GPv2Order} from "./composable/GPv2Order.sol";
-import {SBCDepositContract} from "./composable/SBCDepositContract.sol";
-import "./composable/BaseConditionalOrder.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {ComposableCoW} from "./vendored/ComposableCoW.sol";
+import {GPv2Order} from "./vendored/GPv2Order.sol";
+import {BaseConditionalOrder} from "./vendored/BaseConditionalOrder.sol";
+import {ISBCDepositContract} from "./claimable/ISBCDepositContract.sol";
 
 // --- error strings
 /// @dev can't buy and sell the same token
@@ -32,9 +31,9 @@ contract ClaimAndSwap is BaseConditionalOrder {
     ComposableCoW public immutable composableCow;
 
     // https://gnosisscan.io/address/0x0B98057eA310F4d31F2a452B414647007d1645d9#readProxyContract
-    SBCDepositContract public immutable depositContract;
+    ISBCDepositContract public immutable depositContract;
 
-    constructor(ComposableCoW _composableCow, SBCDepositContract _depositContract) {
+    constructor(ComposableCoW _composableCow, ISBCDepositContract _depositContract) {
         composableCow = _composableCow;
         depositContract = _depositContract;
     }
