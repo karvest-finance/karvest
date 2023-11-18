@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "ETH Global Istanbul",
   "main": "index.js",
+  "license": "MIT",
   "scripts": {
     "build": "hardhat compile",
     "test": "hardhat test",
@@ -16,14 +17,32 @@
   },
   "author": "",
   "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.2",
+    "@nomicfoundation/hardhat-ethers": "^3.0.5",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.9",
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.1",
+    "@typechain/ethers-v6": "^0.5.1",
+    "@typechain/hardhat": "^9.1.0",
+    "@types/chai": "^4.3.10",
+    "@types/mocha": "^10.0.4",
+    "chai": "^4.3.10",
     "hardhat": "^2.19.1",
+    "hardhat-gas-reporter": "^1.0.9",
     "prettier": "^3.0.3",
     "prettier-plugin-solidity": "^1.1.3",
     "solhint": "^3.6.2",
-    "solhint-plugin-prettier": "^0.1.0"
+    "solhint-plugin-prettier": "^0.1.0",
+    "solidity-coverage": "^0.8.5",
+    "ts-node": "^10.9.1",
+    "typechain": "^8.3.2",
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.0.0"
+  },
+  "volta": {
+    "node": "18.18.2",
+    "yarn": "1.22.21"
   }
 }
