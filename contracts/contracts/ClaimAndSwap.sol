@@ -57,9 +57,8 @@ contract ClaimAndSwap is BaseConditionalOrder {
         _validateData(data);
 
         // TODO - in a latter contract:
-        // 0. Get Deposit Contract into Dependencies.
         // 1. Make recurring: use block time n' shit
-        // 2. Use Restating App Data (a post-hook that deposits.)
+        // 2. (optional) Use Restaking App Data (a post-hook that deposits.)
         // 3. Delegate a safe (via token approval) to do stuff
         order = GPv2Order.Data(
             data.claimToken,
