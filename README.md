@@ -1,4 +1,4 @@
-# Claim and Swap
+<h1 align="center">Karvest</h1>
 
 This project combines [CoW Hooks](https://beta.docs.cow.fi/cow-protocol/reference/contracts/periphery/hooks-trampoline) with [Composable CoW](https://github.com/cowprotocol/composable-cow) into a Safe App for the purpose of Claiming/Harvesting Rewards (e.g. Gnosis Chain Validator, or Balancer Staking) and swapping (eventually restaking -- with post hooks) on Cowswap.
 
