@@ -8,7 +8,7 @@ dotenv.config();
 const { MNEMONIC, INFURA_KEY, ETHERSCAN_API_KEY, GNOSISSCAN_API_KEY} = process.env;
 
 const sharedAccountConfig: HttpNetworkAccountsUserConfig = {
-  mnemonic: MNEMONIC || ""
+  mnemonic: MNEMONIC || "myth like bonus scare over problem client lizard pioneer submit female collect"
 }
 
 const config: HardhatUserConfig = {
