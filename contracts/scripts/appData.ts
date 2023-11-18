@@ -96,12 +96,13 @@ async function buildPermitHook(
 
 async function buildTransferFromHook(
     provider: ethers.providers.JsonRpcProvider,
-    address: string,
+    tokenAddress: string,
     from: string,
     to: string,
+    // THIS IS AN ISSUE. Amount will change at execution time! May have to use partially fillable order!
     amount: string,
 ): Promise<cowHook> {
-    const token = new ethers.Contract(address, [`function transferFrom(address, address, uint256) external returns (bool)`], provider);
+    const token = new ethers.Contract(tokenAddress, [`function transferFrom(address, address, uint256) external returns (bool)`], provider);
     const params = [from, to, amount];
     return {
         target: token.address,
@@ -111,16 +112,16 @@ async function buildTransferFromHook(
 }
 
 /// Hook to Claim Validator Rewards for withdrawalAddress
-function buildClaimHook(provider: ethers.providers.JsonRpcProvider, withdrawalAddress: string): object {
-    const DEPOSIT_CONTRACT = new ethers.Contract(
-        "0x0B98057eA310F4d31F2a452B414647007d1645d9",
+function buildClaimHook(provider: ethers.providers.JsonRpcProvider, withdrawalAddress: string, claimContract: string): object {
+    const CLAIM_CONTRACT = new ethers.Contract(
+        claimContract,
         [`function withdrawableAmount(address user) view returns (u256)`, `function claimWithdrawal(address _address) public`],
         provider,
     );
 
     const claimHook = {
-        target: DEPOSIT_CONTRACT.address,
-        callData: DEPOSIT_CONTRACT.interface.encodeFunctionData("claimWithdrawal", [withdrawalAddress]),
+        target: CLAIM_CONTRACT.address,
+        callData: CLAIM_CONTRACT.interface.encodeFunctionData("claimWithdrawal", [withdrawalAddress]),
         // Example Tx: https://gnosisscan.io/tx/0x9501e8cbe873126bfb52ceab26a8644f1f8607f0de2937fa29d2112569480c59
         // Gas Limit: 82264
         // gasLimit: `${await DEPOSIT_CONTRACT.estimateGas.claimWithdrawal(...withdrawalAddress)}`,
@@ -163,11 +164,11 @@ function generateAppData(preHooks: object[], postHooks: object[]): AppData {
     return { hash: appHash, data: appData };
 }
 
-async function postAppData(withdrawalAddress: string, wallet: ethers.Wallet): Promise<void> {
+async function postAppData(appData: AppData): Promise<void> {
     const provider = new ethers.providers.JsonRpcProvider(process.env.NODE_URL || "https://rpc.gnosischain.com/");
 
     // TODO - EOA permit SAFE via set allowance and encode transfer from hook.
-    let { hash, data } = generateAppData([buildClaimHook(provider, withdrawalAddress), buildPermitHook(wallet)], []);
+    let { hash, data } = appData;
 
     const url = `https://api.cow.fi/xdai/api/v1/app_data/${hash}`;
     const requestBody = {
@@ -188,10 +189,24 @@ async function postAppData(withdrawalAddress: string, wallet: ethers.Wallet): Pr
     }
 }
 
-const withdrawalAddress = process.env.WITHDRAWAL_ADDRESS;
-if (!withdrawalAddress) throw new Error("env var WITHDRAWAL_ADDRESS");
+async function multisigAppData() {
+    const WITHDRAWAL_ADDRESS = process.env.WITHDRAWAL_ADDRESS;
+    if (!WITHDRAWAL_ADDRESS) throw new Error("env var WITHDRAWAL_ADDRESS");
+    const SAFE_ADDRESS = process.env.SAFE_ADDRESS;
+    if (!SAFE_ADDRESS) throw new Error("env var SAFE_ADDRESS");
 
-postAppData(withdrawalAddress)
+    /// GNO Token
+    // const CLAIM_TOKEN_ADDRESS = "0x9c58bacc331c9aa871afd802db6379a98e80cedb";
+    /// SBD Deposit Contract
+    const CLAIM_CONTRACT_ADDRESS = "0x0B98057eA310F4d31F2a452B414647007d1645d9";
+    const provider = new ethers.providers.JsonRpcProvider(process.env.NODE_URL || "https://rpc.gnosischain.com/");
+
+    // TODO - EOA permit SAFE via set allowance and encode transfer from hook.
+    let appData = generateAppData([buildClaimHook(provider, WITHDRAWAL_ADDRESS, CLAIM_CONTRACT_ADDRESS)], []);
+    await postAppData(appData);
+}
+
+multisigAppData()
     .then(() => {
         console.log("App data update initiated");
     })
