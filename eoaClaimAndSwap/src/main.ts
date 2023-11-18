@@ -40,7 +40,7 @@ async function eoaClaimAndSwap(
     sellAmountBeforeFee: orderConfig.sellAmount,
     ...orderConfig,
   });
-  
+
   console.log("Getting Quote...");
   const { id: quoteId, quote } = await fetch(`${COW_API}/quote`, {
     method: "POST",
@@ -122,7 +122,7 @@ const provider = new ethers.providers.JsonRpcProvider(
 const COW_API = "https://barn.api.cow.fi/xdai/api/v1";
 
 const wallet = new ethers.Wallet(
-  process.env.PRIVATE_KEY || "0xBADAPIKEY",
+  process.env.PRIVATE_KEY || "0xBADPRIVATEKEY",
   provider
 );
 
