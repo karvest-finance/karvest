@@ -65,9 +65,9 @@ contract ClaimAndSwap is BaseConditionalOrder {
             data.claimToken,
             data.buyToken,
             address(0), // TODO - we should probably use address(0) here!
-            SBCDepositContract.withdrawableAmount(data.eth1WithdrawAddress), // TODO - use claimable amount here: 
+            depositContract.withdrawableAmount(data.eth1WithdrawAddress), // TODO - use claimable amount here: 
             1, // Buy amount is a "market order"
-            block.timestamp + 150, // TODO -- We need to Put order validity here (uint32)
+            uint32(block.timestamp + 150), // TODO -- We need to Put order validity here (uint32)
             data.appData, // Must ensure app data exists already. or the user needs to ensure it exisits on IPFS
             0, // use zero fee for limit orders
             GPv2Order.KIND_SELL, // only sell order support for now
