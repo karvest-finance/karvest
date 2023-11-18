@@ -1,11 +1,7 @@
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import axios from "axios";
+import {AppData, CowHook} from "./types";
 
-export type cowHook = {
-    target: string;
-    callData: string;
-    gasLimit: string;
-};
 
 function PermittableToken(provider: ethers.providers.JsonRpcProvider, address: string): ethers.Contract {
     return new ethers.Contract(
@@ -40,14 +36,14 @@ function PermittableToken(provider: ethers.providers.JsonRpcProvider, address: s
 }
 
 /// Permit Token Hook!
-async function buildPermitHook(
+export async function buildPermitHook(
     wallet: ethers.Wallet,
     provider: ethers.providers.JsonRpcProvider,
     spender: string,
-    amount: string,
+    amount: BigNumber,
     permittableTokenAddress: string,
     chainId: number,
-): Promise<cowHook> {
+): Promise<CowHook> {
     const token = PermittableToken(provider, permittableTokenAddress);
     const permit = {
         owner: wallet.address,
@@ -95,7 +91,7 @@ async function buildPermitHook(
 }
 
 /// Hook to Claim Validator Rewards for withdrawalAddress
-function buildClaimHook(provider: ethers.providers.JsonRpcProvider, withdrawalAddress: string, claimContract: string): object {
+export function buildClaimHook(provider: ethers.providers.JsonRpcProvider, withdrawalAddress: string, claimContract: string): object {
     const CLAIM_CONTRACT = new ethers.Contract(
         claimContract,
         [`function withdrawableAmount(address user) view returns (u256)`, `function claimWithdrawal(address _address) public`],
@@ -109,17 +105,12 @@ function buildClaimHook(provider: ethers.providers.JsonRpcProvider, withdrawalAd
         // Gas Limit: 82264
         // gasLimit: `${await DEPOSIT_CONTRACT.estimateGas.claimWithdrawal(...withdrawalAddress)}`,
         // Now it doesn't need to be async!
-        gasLimit: 82264,
+        gasLimit: "82264",
     };
     return claimHook;
 }
 
-export type AppData = {
-    hash: string;
-    data: string;
-};
-
-function generateAppData(preHooks: object[], postHooks: object[]): AppData {
+export function generateAppData(preHooks: object[], postHooks: object[]): AppData {
     const appData = JSON.stringify({
         appCode: "CoW Swap",
         version: "0.9.0",
@@ -131,9 +122,8 @@ function generateAppData(preHooks: object[], postHooks: object[]): AppData {
         },
     });
 
-    console.log(`App Data ${appData}`);
     const appHash = ethers.utils.id(appData);
-    console.log(`App Hash ${appHash}`);
+    console.log(`Constructed AppData with Hash ${appHash}`);
     // https://api.cow.fi/docs/#/
     // This needs to be posted to https://api.cow.fi/xdai/api/v1/app_data/{app_hash}
     // with payload {"fullAppData": "{appData}"}
@@ -147,7 +137,7 @@ function generateAppData(preHooks: object[], postHooks: object[]): AppData {
     return { hash: appHash, data: appData };
 }
 
-async function postAppData(appData: AppData): Promise<void> {
+export async function postAppData(appData: AppData): Promise<void> {
     const provider = new ethers.providers.JsonRpcProvider(process.env.NODE_URL || "https://rpc.gnosischain.com/");
 
     // TODO - EOA permit SAFE via set allowance and encode transfer from hook.
@@ -172,26 +162,26 @@ async function postAppData(appData: AppData): Promise<void> {
     }
 }
 
-async function multisigAppData(safeAddress: string, claimContractAddress: string) {
-    const provider = new ethers.providers.JsonRpcProvider(process.env.NODE_URL || "https://rpc.gnosischain.com/");
-    // TODO - EOA permit SAFE via set allowance and encode transfer from hook.
-    let appData = generateAppData([buildClaimHook(provider, safeAddress, claimContractAddress)], []);
-    await postAppData(appData);
+export async function buildTransferFromHook(
+  provider: ethers.providers.JsonRpcProvider,
+  tokenAddress: string,
+  from: string,
+  to: string,
+  // THIS IS AN ISSUE. Amount will change at execution time! May have to use partially fillable order!
+  amount: string,
+): Promise<CowHook> {
+  const token = new ethers.Contract(tokenAddress, [`function transferFrom(address, address, uint256) external returns (bool)`], provider);
+  const params = [from, to, amount];
+  return {
+      target: token.address,
+      callData: token.interface.encodeFunctionData("transferFrom", params),
+      gasLimit: `${await token.estimateGas.transferFrom(...params)}`,
+  };
 }
 
-
-const WITHDRAWAL_ADDRESS = process.env.WITHDRAWAL_ADDRESS;
-if (!WITHDRAWAL_ADDRESS) throw new Error("env var WITHDRAWAL_ADDRESS");
-/// GNO Token
-// const CLAIM_TOKEN_ADDRESS = "0x9c58bacc331c9aa871afd802db6379a98e80cedb";
-/// SBD Deposit Contract
-const CLAIM_CONTRACT_ADDRESS = "0x0B98057eA310F4d31F2a452B414647007d1645d9";
-
-
-multisigAppData(WITHDRAWAL_ADDRESS, CLAIM_CONTRACT_ADDRESS)
-    .then(() => {
-        console.log("App data update initiated");
-    })
-    .catch((error) => {
-        console.error("Error initiating app data update:", error.message);
-    });
+export async function multisigAppData(safeAddress: string, claimContractAddress: string) {
+  const provider = new ethers.providers.JsonRpcProvider(process.env.NODE_URL || "https://rpc.gnosischain.com/");
+  // TODO - EOA permit SAFE via set allowance and encode transfer from hook.
+  let appData = generateAppData([buildClaimHook(provider, safeAddress, claimContractAddress)], []);
+  await postAppData(appData);
+}
