@@ -63,7 +63,7 @@ contract ClaimAndSwap is BaseConditionalOrder {
             address(0), // TODO - we should probably use address(0) here! could also use owner
             depositContract.withdrawableAmount(data.eth1WithdrawAddress), // TODO - use claimable amount here:
             1, // Buy amount is a "market order".
-            uint32(block.timestamp + 30 days),
+            1703525574, // December 25, 2023 (use bucket timing)
             data.appData, // Must ensure app data exists already. or the user needs to ensure it exisits on IPFS
             0, // use zero fee for limit orders
             GPv2Order.KIND_SELL, // only sell order support for now

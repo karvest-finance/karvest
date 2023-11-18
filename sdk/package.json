@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "run-eoa": "yarn run ts-node src/main.ts",
+    "create-order-params": "yarn run ts-node src/createOrderData.ts",
     "fmt": "prettier 'src/**/*.ts' -w",
     "lint": "eslint 'src/**/*.ts' --max-warnings 0 --fix"
   },
