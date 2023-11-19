@@ -16,7 +16,10 @@ const Cowllect = ({ sdk, safeInfo, offChainSigningEnabled }: OwnProps): React.Re
 	const provider = new ethers.providers.JsonRpcProvider(RPC_URL)
 	const CLAIM_CONTRACT_ADDRESS = "0x0B98057eA310F4d31F2a452B414647007d1645d9";
 
+	const [hash, setHash] = useState('');
+	const [appData, setAppData] = useState('');
 
+	// TODO - import from 
 	function buildClaimHook(provider: ethers.providers.JsonRpcProvider, withdrawalAddress: string, claimContract: string): object {
 		const CLAIM_CONTRACT = new ethers.Contract(
 			claimContract,
@@ -45,8 +48,10 @@ const Cowllect = ({ sdk, safeInfo, offChainSigningEnabled }: OwnProps): React.Re
 		});
 
 		console.log(`App Data ${appData}`);
+		setAppData("App Data:   " + appData + "\n");
 		const appHash = ethers.utils.id(appData);
 		console.log(`App Hash ${appHash}`);
+		setHash(appHash);
 		return { hash: appHash, data: appData };
 	}
 
@@ -114,7 +119,6 @@ const Cowllect = ({ sdk, safeInfo, offChainSigningEnabled }: OwnProps): React.Re
 			providerGoerli,
 		);
 
-
 		const txs = [
 			{
 				to: safeInfo?.safeAddress,
@@ -161,14 +165,17 @@ const Cowllect = ({ sdk, safeInfo, offChainSigningEnabled }: OwnProps): React.Re
 							</li>
 							<li className="list-group-item d-flex justify-content-between align-items-start">
 								{dataPosted?
-									<div className="fw-bold">✅ - Data Posted on IPFS</div>
+									<>
+										<div className="fw-bold">✅ - Data Posted on IPFS</div>
+										<div>{hash.substring(0, 8)}</div>
+									</>
 								:
 									<>
-									<div className="fw-bold">❌ - Post App data</div>
-									<button className="btn btn-primary" onClick={handlePostData}>📧 Post Data</button>
+										<div className="fw-bold">❌ - Post App data</div>
+										<button className="btn btn-primary" onClick={handlePostData}>📧 Post Data</button>
 									</>
 								}
-							</li>
+							</li>generate
 							<li className="list-group-item d-flex justify-content-between align-items-start">
 								{orderCreated ?
 									<div className="fw-bold">✅ - Order Created on CowSwap</div>
@@ -198,6 +205,9 @@ const Cowllect = ({ sdk, safeInfo, offChainSigningEnabled }: OwnProps): React.Re
 								<p className="card-text">Amount: {item.amount} {item.symbol}</p>
 							</div>
 						</div>
+					</div>
+					<div className='container' style={{ fontFamily: "monospace", wordWrap: "break-word"}}>
+						<div>{appData}</div>
 					</div>
 				</div>
 			</div>
