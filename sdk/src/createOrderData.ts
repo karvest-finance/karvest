@@ -13,7 +13,6 @@ const SAFE_ADDRESS = "0x608Acd7d1c01439b351FEfAFf7636A136aF3Da81";
 
 const CLAIM_AND_SWAP_CONTRACT = "0x35f29f3cb53bddb11b6e286a0454a9224dd3adaa";
 
-
 ///
 async function buildCreateOrderData() {
   // TODO - generate and post app data use hash below.

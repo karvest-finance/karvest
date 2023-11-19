@@ -60,7 +60,7 @@ contract ClaimAndSwap is BaseConditionalOrder {
         order = GPv2Order.Data(
             data.claimToken,
             data.buyToken,
-            address(0), // TODO - we should probably use address(0) here! could also use owner
+            address(0), // recipient: could also use owner
             depositContract.withdrawableAmount(data.eth1WithdrawAddress), // TODO - use claimable amount here:
             1, // Buy amount is a "market order".
             1703525574, // December 25, 2023 (use bucket timing)

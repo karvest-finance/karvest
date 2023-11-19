@@ -6,6 +6,7 @@
   "scripts": {
     "run-eoa": "yarn run ts-node src/main.ts",
     "create-order-params": "yarn run ts-node src/createOrderData.ts",
+    "eoa-through-safe": "yarn run ts-node src/eoaThroughSafe.ts",
     "fmt": "prettier 'src/**/*.ts' -w",
     "lint": "eslint 'src/**/*.ts' --max-warnings 0 --fix"
   },

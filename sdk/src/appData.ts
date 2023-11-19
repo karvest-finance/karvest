@@ -97,7 +97,7 @@ export function buildClaimHook(
   provider: ethers.providers.JsonRpcProvider,
   withdrawalAddress: string,
   claimContract: string
-): object {
+): CowHook {
   const CLAIM_CONTRACT = new ethers.Contract(
     claimContract,
     [
@@ -138,6 +138,8 @@ export function generateAppData(
 
   const appHash = ethers.utils.id(appData);
   console.log(`Constructed AppData with Hash ${appHash}`);
+
+  console.log("App Data Content:", appData);
   // https://api.cow.fi/docs/#/
   // This needs to be posted to https://api.cow.fi/xdai/api/v1/app_data/{app_hash}
   // with payload {"fullAppData": "{appData}"}
@@ -184,17 +186,27 @@ export async function buildTransferBalanceFromHook(
   from: string,
   to: string
 ): Promise<CowHook> {
-  const TRANSFER_BALANCE_FROM_CONTRACT = "0x.....";
-  const token = new ethers.Contract(
+  const TRANSFER_BALANCE_FROM_CONTRACT =
+    "0xD4121d2d90CE7C5F7FB66c4E96815fc377481635";
+  console.log("tokenAddres:", tokenAddress);
+  console.log("from:", from);
+  console.log("to:", from);
+  const transfer = new ethers.Contract(
     TRANSFER_BALANCE_FROM_CONTRACT,
-    [`transferBalanceFrom(IERC20 token, address from, address to)`],
+    [
+      `function transferBalanceFrom(address token, address from, address to) public`,
+    ],
     provider
   );
+  console.log("transfer:", transfer);
   const params = [tokenAddress, from, to];
   return {
-    target: token.address,
-    callData: token.interface.encodeFunctionData("transferBalanceFrom", params),
-    gasLimit: `${await token.estimateGas.transferFrom(...params)}`,
+    target: transfer.address,
+    callData: transfer.interface.encodeFunctionData(
+      "transferBalanceFrom",
+      params
+    ),
+    gasLimit: `${await transfer.estimateGas.transferBalanceFrom(...params)}`,
   };
 }
 
@@ -203,15 +215,15 @@ export async function mixedEoaSafeAppData(
   safeAddress: string,
   claimContractAddress: string,
   claimTokenAddress: string
-) {
+): Promise<AppData> {
   const provider = new ethers.providers.JsonRpcProvider(
     process.env.NODE_URL || "https://rpc.gnosischain.com/"
   );
   // TODO - EOA permit SAFE via set allowance and encode transfer from hook.
-  let appData = generateAppData(
+  let appData = await generateAppData(
     [
       buildClaimHook(provider, safeAddress, claimContractAddress),
-      buildTransferBalanceFromHook(
+      await buildTransferBalanceFromHook(
         provider,
         claimTokenAddress,
         eoaAddress,
@@ -221,6 +233,7 @@ export async function mixedEoaSafeAppData(
     []
   );
   await postAppData(appData);
+  return appData;
 }
 
 export async function safeOnlyAppData(

@@ -61,7 +61,7 @@ It points to the [ComposableCow](https://gnosisscan.io/address/0xfdafc9d1902f4e0
 ### SDK
 
 [Sample EOA Transaction](https://gnosisscan.io/tx/0xadacb7d0862c0f4f341edcfb4ab9746995ef609bb543cbfbccba62b7ef29824a) generated with `run-eoa`
-1. Claims Validator Rewards
+1. Claims REAL GNO Validator Rewards
 2. Swaps the claimed amount for COW token.
 3. See the [order in explorer](https://explorer.cow.fi/gc/orders/0xf607a7dff5adf19906db638ebaba314444ba532877548590d4011e5adff628ab7f01d9b227593e033bf8d6fc86e634d27aa855686558d70b?tab=overview).
 
