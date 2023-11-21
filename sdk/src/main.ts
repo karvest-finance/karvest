@@ -1,5 +1,34 @@
 import { ethers } from "ethers";
-import { generateAppData, buildClaimHook, buildPermitHook } from "./appData";
+import { HookBuilder } from "./appData";
+import {
+  SETTLEMENT_CONTRACT_ADDRESS,
+  COW_API,
+  WEB3_PROVIDER,
+  GNO_TOKEN_ADDRESS,
+  BUY_TOKEN_ADDRESS,
+  GNO_CLAIM_CONTRACT_ADDRESS,
+} from "./constants";
+import { AppData } from "./types";
+
+async function eoaClaimAndPermitAppData(
+  provider: ethers.providers.JsonRpcProvider,
+  sellToken: string,
+  claimAddress: string
+): Promise<AppData> {
+  let builder = new HookBuilder(provider, COW_API);
+  console.log("Building claim and permit hook");
+  let preHooks = await Promise.all([
+    builder.permissionlessClaimHook(wallet.address, claimAddress),
+    builder.permitHook({
+      wallet,
+      tokenAddress: sellToken,
+      amount: ethers.constants.MaxUint256,
+      spender: SETTLEMENT_CONTRACT_ADDRESS,
+    }),
+  ]);
+
+  return builder.generateAppData(preHooks, []);
+}
 
 async function eoaClaimAndSwap(
   wallet: ethers.Wallet,
@@ -10,25 +39,30 @@ async function eoaClaimAndSwap(
 ) {
   const { chainId } = await provider.getNetwork();
   console.log(`connected to chain ${chainId} with account ${wallet.address}`);
-  const appData = generateAppData(
-    [
-      buildClaimHook(provider, wallet.address, claimAddress),
-      await buildPermitHook(
-        wallet,
-        provider,
-        SETTLEMENT_CONTRACT_ADDRESS,
-        ethers.constants.MaxUint256,
-        sellToken,
-        chainId
-      ),
-    ],
-    []
+  const appData = await eoaClaimAndPermitAppData(
+    provider,
+    sellToken,
+    claimAddress
   );
+  let contract = new ethers.Contract(
+    claimAddress,
+    [`function withdrawableAmount(address)`],
+    provider
+  );
+  const claimAmount = await contract
+    .connect(wallet)
+    .withdrawableAmount(wallet.address);
+  if (!(claimAmount > 0)) {
+    console.log("Nothing to claim");
+    return;
+  }
+
+  console.log("Claim Amount:", claimAmount);
   const orderConfig = {
     sellToken,
     buyToken,
     receiver: ethers.constants.AddressZero,
-    sellAmount: `${ethers.utils.parseUnits("0.1", 18)}`,
+    sellAmount: claimAmount,
     kind: "sell",
     partiallyFillable: false,
     sellTokenBalance: "erc20",
@@ -56,6 +90,7 @@ async function eoaClaimAndSwap(
   const orderData = {
     ...orderConfig,
     sellAmount: quote.sellAmount,
+    // 1% slippage tolerance.
     buyAmount: `${ethers.BigNumber.from(quote.buyAmount).mul(99).div(100)}`,
     validTo: quote.validTo,
     appData: appData.hash,
@@ -106,30 +141,15 @@ async function eoaClaimAndSwap(
   console.log("order:", orderUid);
 }
 
-/// GNO Token
-const CLAIM_TOKEN_ADDRESS = "0x9c58bacc331c9aa871afd802db6379a98e80cedb";
-/// COW on Gnosis Chain
-const BUY_TOKEN_ADDRESS = "0x177127622c4A00F3d409B75571e12cB3c8973d3c";
-/// SBD Deposit Contract
-const CLAIM_CONTRACT_ADDRESS = "0x0B98057eA310F4d31F2a452B414647007d1645d9";
-
-const SETTLEMENT_CONTRACT_ADDRESS =
-  "0x9008D19f58AAbD9eD0D60971565AA8510560ab41";
-
-const provider = new ethers.providers.JsonRpcProvider(
-  process.env.NODE_URL || "https://rpc.gnosischain.com/"
-);
-const COW_API = "https://barn.api.cow.fi/xdai/api/v1";
-
 const wallet = new ethers.Wallet(
   process.env.PRIVATE_KEY || "0xBADPRIVATEKEY",
-  provider
+  WEB3_PROVIDER
 );
 
 eoaClaimAndSwap(
   wallet,
-  provider,
-  CLAIM_TOKEN_ADDRESS,
+  WEB3_PROVIDER,
+  GNO_TOKEN_ADDRESS,
   BUY_TOKEN_ADDRESS,
-  CLAIM_CONTRACT_ADDRESS
+  GNO_CLAIM_CONTRACT_ADDRESS
 );
