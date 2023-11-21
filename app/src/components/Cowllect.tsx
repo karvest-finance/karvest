@@ -52,7 +52,7 @@ const Cowllect = ({ sdk, safeInfo, offChainSigningEnabled }: OwnProps): React.Re
 
 	async function postAppData(appData: AppData): Promise<void> {
 		let { hash, data } = appData;
-		const url = `${COW_API}/app_data/${hash}`;
+		const url = `https://api.cow.fi/xdai/api/v1/app_data/${hash}`;
 		const requestBody = {
 			fullAppData: data,
 		};
