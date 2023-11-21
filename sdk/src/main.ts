@@ -8,17 +8,14 @@ import {
   BUY_TOKEN_ADDRESS,
   GNO_CLAIM_CONTRACT_ADDRESS,
 } from "./constants";
+import { AppData } from "./types";
 
-async function eoaClaimAndSwap(
-  wallet: ethers.Wallet,
+async function eoaClaimAndPermitAppData(
   provider: ethers.providers.JsonRpcProvider,
   sellToken: string,
-  buyToken: string,
   claimAddress: string
-) {
-  const { chainId } = await provider.getNetwork();
+): Promise<AppData> {
   let builder = new HookBuilder(provider, COW_API);
-  console.log(`connected to chain ${chainId} with account ${wallet.address}`);
   console.log("Building claim and permit hook");
   let preHooks = await Promise.all([
     builder.permissionlessClaimHook(wallet.address, claimAddress),
@@ -30,7 +27,23 @@ async function eoaClaimAndSwap(
     }),
   ]);
 
-  const appData = builder.generateAppData(preHooks, []);
+  return builder.generateAppData(preHooks, []);
+}
+
+async function eoaClaimAndSwap(
+  wallet: ethers.Wallet,
+  provider: ethers.providers.JsonRpcProvider,
+  sellToken: string,
+  buyToken: string,
+  claimAddress: string
+) {
+  const { chainId } = await provider.getNetwork();
+  console.log(`connected to chain ${chainId} with account ${wallet.address}`);
+  const appData = await eoaClaimAndPermitAppData(
+    provider,
+    sellToken,
+    claimAddress
+  );
   let contract = new ethers.Contract(
     claimAddress,
     [`function withdrawableAmount(address)`],
@@ -43,6 +56,7 @@ async function eoaClaimAndSwap(
     console.log("Nothing to claim");
     return;
   }
+
   console.log("Claim Amount:", claimAmount);
   const orderConfig = {
     sellToken,
@@ -76,6 +90,7 @@ async function eoaClaimAndSwap(
   const orderData = {
     ...orderConfig,
     sellAmount: quote.sellAmount,
+    // 1% slippage tolerance.
     buyAmount: `${ethers.BigNumber.from(quote.buyAmount).mul(99).div(100)}`,
     validTo: quote.validTo,
     appData: appData.hash,

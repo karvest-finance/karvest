@@ -1,12 +1,13 @@
 import { ethers } from "ethers";
 import { generateOrderSalt } from "./utils";
-import { AppData, HookBuilder } from "./appData";
+import { HookBuilder } from "./appData";
 import {
   COW_API,
   GNO_CLAIM_CONTRACT_ADDRESS,
   CLAIM_AND_SWAP_CONTRACT,
   GNO_TOKEN_ADDRESS,
 } from "./constants";
+import { AppData } from "./types";
 
 /// COW on Gnosis Chain
 const BUY_TOKEN_ADDRESS = "0x177127622c4A00F3d409B75571e12cB3c8973d3c";

@@ -1,7 +1,8 @@
 import { ethers } from "ethers";
-import { AppData, HookBuilder } from "./appData";
+import { HookBuilder } from "./appData";
 import { generateOrderSalt } from "./utils";
 import { CLAIM_AND_SWAP_CONTRACT, COW_API } from "./constants";
+import { AppData } from "./types";
 
 /// WXDAI
 const CLAIM_TOKEN_ADDRESS = "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d";
